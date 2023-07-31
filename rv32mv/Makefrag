@@ -5,4 +5,9 @@
 # Author: Matheus Cavalcante <matheusd@iis.ee.ethz.ch>
 #         Basile Bougenot <bbougenot@student.ethz.ch>
 
-rv32mv_sc_tests = vadd
+rv32mv_sc_tests = vadd \
+                  vmv \
+                  vand \
+                  vor \
+                  vxor
+
