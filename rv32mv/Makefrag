@@ -9,5 +9,6 @@ rv32mv_sc_tests = vadd \
                   vmv \
                   vand \
                   vor \
-                  vxor
+                  vxor \
+                  vid
 
