@@ -33,7 +33,7 @@ void TEST_CASE1() {
 }
 
 void TEST_CASE2() {
-  const uint64_t scalar = 0x00000000deadbeef;
+  const uint64_t scalar = 0xdeadbeef;
 
   VSET(16, e8, m1);
   VLOAD_8(v8, 1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8);
@@ -58,12 +58,12 @@ void TEST_CASE2() {
   VSET(16, e64, m8);
   VLOAD_64(v8, 1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8);
   asm volatile("vmv.v.x v24, %[A]" ::[A] "r"(scalar));
-  VCMP_U64(8, v24, 0x00000000deadbeef, 0x00000000deadbeef, 0x00000000deadbeef,
-           0x00000000deadbeef, 0x00000000deadbeef, 0x00000000deadbeef,
-           0x00000000deadbeef, 0x00000000deadbeef, 0x00000000deadbeef,
-           0x00000000deadbeef, 0x00000000deadbeef, 0x00000000deadbeef,
-           0x00000000deadbeef, 0x00000000deadbeef, 0x00000000deadbeef,
-           0x00000000deadbeef);
+  VCMP_U64(8, v24, 0xffffffffdeadbeef, 0xffffffffdeadbeef, 0xffffffffdeadbeef,
+           0xffffffffdeadbeef, 0xffffffffdeadbeef, 0xffffffffdeadbeef,
+           0xffffffffdeadbeef, 0xffffffffdeadbeef, 0xffffffffdeadbeef,
+           0xffffffffdeadbeef, 0xffffffffdeadbeef, 0xffffffffdeadbeef,
+           0xffffffffdeadbeef, 0xffffffffdeadbeef, 0xffffffffdeadbeef,
+           0xffffffffdeadbeef);
 }
 
 void TEST_CASE3() {
