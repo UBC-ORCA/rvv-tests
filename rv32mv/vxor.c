@@ -288,7 +288,7 @@ void TEST_CASE6() {
            0xdeadbeefdeadbeef, 0xdeadbeefdeadbeef, 0xdeadbeefdeadbeef,
            0xdeadbeefdeadbeef, 0xdeadbeefdeadbeef, 0xdeadbeefdeadbeef);
   asm volatile("vxor.vi v8, v16, 15, v0.t");
-  VCMP_U64(40, v8, 0xfffffffffffffff0, 0xdeadbeefdeadbeef, 0xf0f0f0f0f0f0f0ff,
+  VCMP_U64(24, v8, 0xfffffffffffffff0, 0xdeadbeefdeadbeef, 0xf0f0f0f0f0f0f0ff,
            0xfffffffffffffff0, 0xdeadbeefdeadbeef, 0xf0f0f0f0f0f0f0ff,
            0xfffffffffffffff0, 0xdeadbeefdeadbeef, 0xf0f0f0f0f0f0f0ff,
            0xfffffffffffffff0, 0xdeadbeefdeadbeef, 0xf0f0f0f0f0f0f0ff);
