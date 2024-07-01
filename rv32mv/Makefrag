@@ -5,10 +5,20 @@
 # Author: Matheus Cavalcante <matheusd@iis.ee.ethz.ch>
 #         Basile Bougenot <bbougenot@student.ethz.ch>
 
-rv32mv_sc_tests = vadd \
-                  vmv \
-                  vand \
-                  vor \
+rv32mv_sc_tests = vand \
+                  vor  \
                   vxor \
-                  vid
-
+                  vsll \
+                  vsrl \
+                  vmv  \
+                  vslide1down \
+                  vslide1up \
+                  vmin \
+                  vminu \
+                  vmax \
+                  vmaxu \
+                  vadd \
+                  vmul \
+                  vl \
+                  vs \
+                  vle_vse_hazards

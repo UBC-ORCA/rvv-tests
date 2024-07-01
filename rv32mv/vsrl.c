@@ -110,7 +110,7 @@ void TEST_CASE2(void) {
 };
 
 void TEST_CASE3(void) {
-  const uint64_t scalar = 2;
+  const uint32_t scalar = 2;
 
   VSET(16, e8, m1);
   VLOAD_8(v2, 0x04, 0x08, 0x0C, 0x10, 0x14, 0x18, 0x1C, 0x20, 0xE0, 0xE4, 0xE8,
@@ -155,7 +155,7 @@ void TEST_CASE3(void) {
 };
 
 void TEST_CASE4(void) {
-  const uint64_t scalar = 2;
+  const uint32_t scalar = 2;
 
   VSET(16, e8, m1);
   VLOAD_8(v2, 0x04, 0x08, 0x0C, 0x10, 0x14, 0x18, 0x1C, 0x20, 0xE0, 0xE4, 0xE8,

@@ -14,6 +14,17 @@
 
 #define enable_vec() do { asm volatile ("csrw %[csr], %[rs];" :: [rs] "rK" (1 << MCFU_SELECTOR_ENABLE), [csr] "i" (CSR_MCFU_SELECTOR)); } while (0);
 
+#define CX_FENCE_SCALAR_READ(base_address, end_address)                                               \
+  do {                                                                                                \
+    asm volatile ("cfu_reg 1008,x0,%[ba],%[ea]" :: [ba] "r" (base_address), [ea] "r" (end_address));  \
+  } while(0)
+
+#define CX_FENCE_SCALAR_WRITE(base_address, end_address)                                              \
+  do {                                                                                                \
+    asm volatile ("cfu_reg 1009,x0,%[ba],%[ea]" :: [ba] "r" (base_address), [ea] "r" (end_address));  \
+  } while(0)
+
+
 /**************
  *  Counters  *
  **************/
@@ -64,7 +75,9 @@ int test_case;
 // In order to avoid that scalar loads run ahead of vector stores,
 // we use an instruction to ensure that all vector stores have been
 // committed before continuing with scalar memory operations.
-#define MEMORY_BARRIER // asm volatile ("fence");
+#define MEMORY_BARRIER //asm volatile ("fence");
+#define CPU_MEMORY_BARRIER asm volatile ("fence rw, io");
+#define CXU_MEMORY_BARRIER CX_FENCE_SCALAR_WRITE(0, -1);
 
 // Zero-initialized variables can be problematic on bare-metal.
 // Therefore, initialize them during runtime.
@@ -110,7 +123,7 @@ int test_case;
 #define VCMP(T,str,casenum,vexp,act...)                                               \
   T vact[] = {act};                                                                   \
   printf("Checking the results of the test case %d:\r\n", casenum);                     \
-  MEMORY_BARRIER;                                                                     \
+  CXU_MEMORY_BARRIER;                                                                     \
   for (unsigned int i = 0; i < sizeof(vact)/sizeof(T); i++) {                         \
     if (vexp[i] != vact[i]) {                                                         \
       printf("Index %d FAILED. Got "#str", expected "#str".\r\n", i, vexp[i], vact[i]); \
@@ -123,7 +136,7 @@ int test_case;
 //Macro used to compare large number of elements
 #define LVCMP(T,str,casenum,elements, vexp ,vact)                                     \
   printf("Checking the results of the test case %d:\r\n", casenum);                     \
-  MEMORY_BARRIER;                                                                     \
+  CXU_MEMORY_BARRIER;                                                                     \
   for (unsigned int i = 0; i < elements; i++) {                                       \
     if (vexp[i] != vact[i]) {                                                         \
       printf("Index %d FAILED. Got "#str", expected "#str".\r\n", i, vexp[i], vact[i]); \
@@ -137,7 +150,7 @@ int test_case;
 // Check the results against an in-memory vector of golden values
 #define VMCMP(T,str,casenum,vexp,vgold,size)                                          \
   printf("Checking the results of the test case %d:\r\n", casenum);                     \
-  MEMORY_BARRIER;                                                                     \
+  CXU_MEMORY_BARRIER;                                                                     \
   for (unsigned int i = 0; i < size; i++) {                                           \
     if (vexp[i] != vgold[i]) {                                                        \
       printf("Index %d FAILED. Got "#str", expected "#str".\r\n", i, vexp[i], vgold[i]);\
@@ -172,7 +185,7 @@ int test_case;
 #define VLOAD(datatype,loadtype,vreg,vec...)                                \
   do {                                                                      \
     volatile datatype V ##vreg[] = {vec};                                   \
-    MEMORY_BARRIER;                                                         \
+    CPU_MEMORY_BARRIER;                                                         \
     asm volatile ("vl"#loadtype".v "#vreg", (%0)  \n":: [V] "r"(V ##vreg)); \
   } while(0)
 
@@ -181,7 +194,7 @@ int test_case;
   do {                                                                    \
     T* vec ##_t = (T*) vec;                                               \
     asm volatile ("vs"#storetype".v "#vreg", (%0) \n" : "+r" (vec ##_t));  \
-    MEMORY_BARRIER;                                                       \
+    CXU_MEMORY_BARRIER;                                                       \
   } while(0)
 
 // Macro to reset the whole register back to zero
@@ -231,7 +244,7 @@ int test_case;
 #define LVCMP_U64(casenum,vect,act)  {uint64_t vl; read_vl(vl); VSTORE_L64(vect);    \
                                        LVCMP(uint64_t, %x,casenum,vl,Lu64,act)}
 
-#define VVCMP_U64(casenum,ptr64,act...) {VCMP(uint64_t,%x,casenum,ptr64,act)}
+#define VVCMP_U64(casenum,ptr64,act...) {VCMP(uint64_t,%llx,casenum,ptr64,act)}
 #define VVCMP_U32(casenum,ptr32,act...) {VCMP(uint32_t,%x,casenum,ptr32,act)}
 #define VVCMP_U16(casenum,ptr16,act...) {VCMP(uint16_t,%x,casenum,ptr16,act)}
 #define VVCMP_U8(casenum,ptr8,act...)   {VCMP(uint8_t, %x,casenum,ptr8, act)}

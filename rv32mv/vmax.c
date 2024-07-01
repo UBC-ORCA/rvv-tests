@@ -84,7 +84,7 @@ void TEST_CASE2(void) {
 };
 
 void TEST_CASE3(void) {
-  const uint64_t scalar = 40;
+  const uint32_t scalar = 40;
 
   VSET(16, e8, m1);
   VLOAD_8(v16, 123, -8, -25, 99, 123, -8, -25, 99, 123, -8, -25, 99, 123, -8,
@@ -116,7 +116,7 @@ void TEST_CASE3(void) {
 };
 
 void TEST_CASE4(void) {
-  const uint64_t scalar = 40;
+  const uint32_t scalar = 40;
 
   VSET(16, e8, m1);
   VLOAD_8(v16, 123, -8, -25, 99, 123, -8, -25, 99, 123, -8, -25, 99, 123, -8,
