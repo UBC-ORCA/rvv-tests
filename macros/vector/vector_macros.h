@@ -16,12 +16,12 @@
 
 #define CX_FENCE_SCALAR_READ(base_address, end_address)                                               \
   do {                                                                                                \
-    asm volatile ("cfu_reg 1008,x0,%[ba],%[ea]" :: [ba] "r" (base_address), [ea] "r" (end_address));  \
+    asm volatile ("cx_reg 1008,31,%[ba],%[ea]" :: [ba] "r" (base_address), [ea] "r" (end_address));  \
   } while(0)
 
 #define CX_FENCE_SCALAR_WRITE(base_address, end_address)                                              \
   do {                                                                                                \
-    asm volatile ("cfu_reg 1009,x0,%[ba],%[ea]" :: [ba] "r" (base_address), [ea] "r" (end_address));  \
+    asm volatile ("cx_reg 1009,x31,%[ba],%[ea]" :: [ba] "r" (base_address), [ea] "r" (end_address));  \
   } while(0)
 
 
@@ -230,7 +230,7 @@ int test_case;
  ***************************/
 
 // Vector comparison
-#define VCMP_U64(casenum,vect,act...) {VSTORE_U64(vect); VCMP(uint64_t,%x,casenum,Ru64,act)}
+#define VCMP_U64(casenum,vect,act...) {VSTORE_U64(vect); VCMP(uint64_t,%llx,casenum,Ru64,act)}
 #define VCMP_U32(casenum,vect,act...) {VSTORE_U32(vect); VCMP(uint32_t,%x,casenum,Ru32,act)}
 #define VCMP_U16(casenum,vect,act...) {VSTORE_U16(vect); VCMP(uint16_t,%x,casenum,Ru16,act)}
 #define VCMP_U8(casenum,vect,act...)  {VSTORE_U8(vect) ; VCMP(uint8_t, %x,casenum, Ru8,act)}
